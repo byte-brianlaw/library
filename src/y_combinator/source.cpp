@@ -1,25 +1,25 @@
 #include <utility>
 
-template <typename T>
+template <typename FunctionObject>
 class YCombinator {
 
 private:
 
-    const T lambda = nullptr;
+    const FunctionObject function = nullptr;
 
 public:
 
-    template <typename U>
-    explicit YCombinator(U&& lambda) : lambda(lambda) {}
+    template <typename Lambda>
+    explicit YCombinator(Lambda&& lambda) : function(lambda) {}
 
     template <typename... Arguments>
     decltype(auto) operator()(Arguments&&... arguments) const {
 
-        return lambda(*this, std::forward<Arguments>(arguments)...);
+        return function(*this, std::forward<Arguments>(arguments)...);
 
     }
 
 };
 
-template <typename T>
-YCombinator(T) -> YCombinator<T>;
+template <typename Lambda>
+YCombinator(Lambda) -> YCombinator<Lambda>;
